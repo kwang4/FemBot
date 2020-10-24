@@ -15,8 +15,13 @@ exports.loadJsCommands = (client) =>
                     {
                         if(!file.endsWith('.js')) return;
                         path = '../commands/'+dir+'/'  //Fs is dumb and runs from index.js directory, but require runs from wherever this file is (utils), so have to edit path here only.
+                       try
+                       {
+                           delete require.cache[require.resolve(path+file)];
+                       }catch{console.log(file + 'has not been loaded before')}
                         let command_file = require(path+file);
-                        client.commands.set(command_file.name,command_file);
+                        client.commands.set(command_file.conf.name,command_file);
+                        console.log(command_file.conf.name);
                         
                     });
             });
@@ -27,35 +32,36 @@ exports.loadJsCommands = (client) =>
 exports.handleCommands = (client) =>{
 client.on("message", (message) => { 
     //parse message for commands and args
-	if(message.author.bot || !message.content.startsWith(cfg.prefix)) return;
+    console.log(message.content.toString());
+	if(message.author.bot || !message.content.startsWith(cfg.prefix)||message.guild === null) return;
 	const args = message.content.slice(cfg.prefix.length).trim().split(/ +/);
     const commandName = args.shift().toLowerCase();
     //checking right number of args
     
     if(!client.commands.has(commandName)) return;
     const command = client.commands.get(commandName);
-    if(command.perms)
+    if(command.conf.perms)
     {
-        if(!message.member.hasPermission(command.perms))
+        if(!message.member.hasPermission(command.conf.perms))
         {
             message.reply('You do not have the required perms ');
             return;
         }
         
     } 
-    if(args.length<command.args) //if provided args num is less than required args in command
+    if(args.length<command.conf.args) //if provided args num is less than required args in command
     {
         let response = `Wrong number of arguments provided, ${message.author}`;
-        if(command.usage)
+        if(command.conf.usage)
         {
-            response += `\nProper usage is: ${cfg.prefix} ${commandName} ${command.usage}`;
+            response += `\nProper usage is: ${cfg.prefix} ${commandName} ${command.conf.usage}`;
         }
         message.channel.send(response);
         return;
     }
     try
     {
-        command.run(message,args,client);
+        command.run(client,message,args);
     }
     catch(error)
     {

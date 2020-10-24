@@ -7,6 +7,11 @@ const reqString =
 const scheduleSchema = mongoose.Schema(
     {
         _id:reqString,
-        messageIds:[reqString],
+        messageIds:
+        {
+            type:Array,
+            required:false,
+            default:[]
+        },
     });
-module.exports = mongoose.model('schedule',scheduleSchema);
+module.exports = mongoose.model('schedule-command',scheduleSchema);

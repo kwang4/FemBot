@@ -1,4 +1,13 @@
-module.exports =
+exports.run = (client,message,args) =>
+{
+    var response = '';
+    args.forEach(element=>
+        {
+        response +=(element.toString()+ ' ');
+    });
+    message.channel.send('Fembot says ' + response);
+};
+exports.conf = 
 {
     name:'echo',
     args:1,
@@ -6,14 +15,5 @@ module.exports =
     description: 'repeat something',
     category:'fun',
     perms:'',
-    run: (message,args)=>
-    {
-        var response = '';
-        args.forEach(element=>
-            {
-            response +=(element.toString()+ ' ');
-        });
-        message.channel.send('Fembot says ' + response);
-    },
-
 };
+
