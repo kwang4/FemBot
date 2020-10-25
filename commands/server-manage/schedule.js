@@ -72,6 +72,7 @@ exports.conf =
     description: 'schedules a scrim/match and gives people options to react yes, no, or undecided.',
     category:'server-manage',
     perms:'MANAGE_MESSAGES',
+    aliases:[],
 };
 
 async function pushDB(msg,maData)

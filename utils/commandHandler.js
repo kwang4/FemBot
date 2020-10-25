@@ -31,14 +31,16 @@ exports.loadJsCommands = (client) =>
 };
 exports.handleCommands = (client) =>{
 client.on("message", (message) => { 
+    console.log(message.content);
     //parse message for commands and args
 	if(message.author.bot || !message.content.startsWith(cfg.prefix)||message.guild === null) return;
 	const args = message.content.slice(cfg.prefix.length).trim().split(/ +/);
     const commandName = args.shift().toLowerCase();
     //checking right number of args
     
-    if(!client.commands.has(commandName)) return;
-    const command = client.commands.get(commandName);
+
+    const command = client.commands.get(commandName)||client.commands.find(cmd=>cmd.conf.aliases && cmd.conf.aliases.includes(commandName));
+    if(!command) return;
     if(command.conf.perms)
     {
         if(!message.member.hasPermission(command.conf.perms))

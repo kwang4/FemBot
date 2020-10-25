@@ -40,5 +40,6 @@ exports.conf =
     description: 'sets welcome message for each server, use this in whichever channel you want the welcome message to show',
     category:'standard',
     perms:'ADMINISTRATOR',
+    aliases:['sw','welcomemessage'],
 };
 

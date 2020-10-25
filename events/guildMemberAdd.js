@@ -7,6 +7,7 @@ exports.on = async (client,member) =>
         await mongo().then(async (mongoose)=>{
             try{
             const result = await welcomeSchema.findOne({_id:guild.id});
+            if(!result) return;
             data = [result.channelId,result.welcomeText];
             }
             finally
@@ -14,7 +15,7 @@ exports.on = async (client,member) =>
                 mongoose.connection.close();
             }
         });
-    
+    if(!data) return;
     const channelId = data[0];
     const text = data[1];
     const channel = guild.channels.cache.get(channelId);

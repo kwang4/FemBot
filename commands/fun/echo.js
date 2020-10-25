@@ -15,5 +15,6 @@ exports.conf =
     description: 'repeat something',
     category:'fun',
     perms:'',
+    aliases:[],
 };
 

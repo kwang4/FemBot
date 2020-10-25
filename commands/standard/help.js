@@ -11,5 +11,6 @@ exports.conf =
     description: 'gives you help lmao',
     category:'fun',
     perms:'',
+    aliases:['h'],
 };
 

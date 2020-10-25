@@ -14,5 +14,6 @@ exports.conf =
     description: 'am I cool or not',
     category:'fun',
     perms:'',
+    aliases:[],
 };
 

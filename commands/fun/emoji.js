@@ -1,4 +1,5 @@
-exports.run = (client,message,args) =>
+var emojicache;
+exports.run = async (client,message,args) =>
 {
     const channel = message.channel;
     const author = message.author;
@@ -16,8 +17,19 @@ exports.run = (client,message,args) =>
     }
     
     message.delete();
+
 if(!emojiArr.includes(args[0].trim().toLowerCase()))
-    message.reply('No matching emoji found. Here is a list of current emojis the bot has access to : '+emojiArr);
+{
+    var allEmojis = '';
+    for(var i =0;i<emojiArr.length;i++)
+    {
+        allEmojis+=emojiArr[i] + ': <a:'+emojiArr[i]+':'+emojiIdArr[i]+'>,    ';
+    }
+    message.reply('No matching emoji found. Here is a list of current emojis the bot has access to : '+allEmojis);
+    var cache = await client.emojis.cache;
+    console.log(cache);
+}
+
     
 
 };
@@ -29,5 +41,6 @@ exports.conf =
     description: 'sends nitro emojis',
     category:'fun',
     perms:'',
+    aliases:['e','emote'],
 };
 
