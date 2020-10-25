@@ -13,6 +13,8 @@ client.commands = new Discord.Collection();
 client.on('ready',()=>
 {
     console.log('logged in as '+ client.user.tag);
+    client.user.setActivity('.f help',{type:'WATCHING'});
+
 });
 
 client.login(token);

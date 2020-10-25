@@ -14,7 +14,6 @@ exports.run = async (client,message,args) =>
         {
             mention = args.splice(i,1);
         }
-        args.splice(i,1);
 
     }
   }
@@ -63,7 +62,7 @@ fullMessage = args.join(' ');
    channel.send(mention.toString()).then();
    msg.react('✅').then(msg.react('❌').then(msg.react('❔').then(msg.react('💀'))));
     pushDB(msg,msg.id);
-   
+   message.delete();
 };
 exports.conf = 
 {

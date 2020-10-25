@@ -32,7 +32,6 @@ exports.loadJsCommands = (client) =>
 exports.handleCommands = (client) =>{
 client.on("message", (message) => { 
     //parse message for commands and args
-    console.log(message.content.toString());
 	if(message.author.bot || !message.content.startsWith(cfg.prefix)||message.guild === null) return;
 	const args = message.content.slice(cfg.prefix.length).trim().split(/ +/);
     const commandName = args.shift().toLowerCase();

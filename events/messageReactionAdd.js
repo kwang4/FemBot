@@ -10,6 +10,7 @@ exports.on = async (client,messageReaction,user) =>
    }
    //got the whole message now
    var msgIds = await getDB(messageReaction.message);
+   if(!msgIds||msgIds == 'null') return;
    if(messageReaction.message.author.id == client.user.id && user.id != client.user.id && msgIds.includes(messageReaction.message.id))//Is this a schedule message?
    {
        var maData = ['12345','23445','12345'];
@@ -47,17 +48,17 @@ exports.on = async (client,messageReaction,user) =>
             [
                 {
                     name: '✅     Accepted',
-                    value: yes+'\n-',
+                    value: yes.join(' \n')+'\n-',
                     inline: true,
                 },
                 {
                     name: '❌    Rejected',
-                    value: no+'\n-',
+                    value: no.join(' \n')+'\n-',
                     inline: true,
                 },
                 {
                     name: '❔     Unsure',
-                    value: maybe+'\n-',
+                    value: maybe.join(' \n')+'\n-',
                     inline: true,
                 },
                    
@@ -115,6 +116,7 @@ function getDB(message)
                try{
                    const guildId = message.guild.id;
                    const result = await scheduleSchema.findOne({_id:guildId});
+                   if(!result) {resolve('null');return;}
                     msgIds = result.messageIds;
                }
                catch(err) {console.log(err)}

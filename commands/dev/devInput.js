@@ -2,6 +2,8 @@ const commandHandler = require('../../utils/commandHandler.js');
 const eventHandler = require('../../utils/eventHandler.js');
 const cache = require('../../cache');
 
+
+
 exports.run = (client) =>
 {
     var channelID = "762737723499872260";
@@ -38,6 +40,6 @@ exports.conf =
     usage:'',
     description: 'Input text from console',
     category:'dev',
-    perms:'',
+    perms:'AINTNOBODYLOVESMEBETTER',
 };
 
