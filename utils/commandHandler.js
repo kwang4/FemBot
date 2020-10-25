@@ -21,7 +21,7 @@ exports.loadJsCommands = (client) =>
                        }catch{console.log(file + 'has not been loaded before')}
                         let command_file = require(path+file);
                         client.commands.set(command_file.conf.name,command_file);
-                        console.log(command_file.conf.name);
+                        console.log(`:${command_file.conf.name}:`);
                         
                     });
             });
@@ -31,7 +31,7 @@ exports.loadJsCommands = (client) =>
 };
 exports.handleCommands = (client) =>{
 client.on("message", (message) => { 
-    console.log(message.content);
+    //console.log(message.content);
     //parse message for commands and args
 	if(message.author.bot || !message.content.startsWith(cfg.prefix)||message.guild === null) return;
 	const args = message.content.slice(cfg.prefix.length).trim().split(/ +/);

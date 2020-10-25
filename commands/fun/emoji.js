@@ -1,36 +1,45 @@
 var emojicache;
-exports.run = async (client,message,args) =>
+var formattedEmojis;
+var formattedAEmojis;
+var animated = '';
+exports.run =  (client,message,args) =>
 {
     const channel = message.channel;
     const author = message.author;
-    const emojiArr = ['poggers','partypug','blob','among_us','blob2','thicc_us','blobchain'];
-    const emojiIdArr = ['768574644390985738','768568749573275718','769701151641174077','769696260046979082','769696322558099466','769696194544402453','769701391420882945'];
-    for(var i =0;i<emojiArr.length;i++)
+    emojicache = client.emojis.cache;
+    searchFor = emojicache.find(r=>r.name.toLowerCase()==args[0].trim().toLowerCase());
+    if(searchFor)
     {
-        if(emojiArr[i].toLowerCase()==args[0].trim())
-        {
-            channel.send('**'+message.author.username+'**\n\n').then(channel.send('<a:'+emojiArr[i]+':'+emojiIdArr[i]+'>'));
-            message.delete();
-            return;
-        }
+        animated = '';
+        if(searchFor.animated)
+            animated = 'a'
+        message.channel.send(`**${message.author.username}**`);
+        message.channel.send('<'+animated+`:${searchFor.name}:${searchFor.id}>`);
         
     }
-    
-    message.delete();
-
-if(!emojiArr.includes(args[0].trim().toLowerCase()))
-{
-    var allEmojis = '';
-    for(var i =0;i<emojiArr.length;i++)
+    else
     {
-        allEmojis+=emojiArr[i] + ': <a:'+emojiArr[i]+':'+emojiIdArr[i]+'>,    ';
-    }
-    message.reply('No matching emoji found. Here is a list of current emojis the bot has access to : '+allEmojis);
-    var cache = await client.emojis.cache;
-    console.log(cache);
-}
+        formattedAEmojis = '';
+        formattedEmojis = '';
+            emojicache.forEach(e=>
+            {
+                if(e.animated)
+                {
+                    formattedAEmojis += ' <a'+`:${e.name}:${e.id}> `;
+                }
+                else
+                {
+                formattedEmojis += ' <'+`:${e.name}:${e.id}> `;
+                }
+            });
+        
 
-    
+        message.channel.send('Emoji not found. Here is a list of all emojis I have access to: \n');
+        message.channel.send(formattedAEmojis);
+        message.channel.send(formattedEmojis);
+        message.reply('Please use .f emoji [name of emoji you want *without* the \":\"]');
+    }
+    message.delete();
 
 };
 exports.conf = 
