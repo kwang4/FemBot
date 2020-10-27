@@ -4,7 +4,7 @@ exports.run = (client,message,args) =>
     if(rn>=.5)
         message.channel.send('Yes you are very cool UwU');
     else
-        message.channel.send('Not as cool as the Femboys :sunglasses:');
+        message.channel.send('You\'\re not as cool as the Femboys :sunglasses:');
 };
 exports.conf = 
 {

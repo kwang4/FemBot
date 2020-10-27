@@ -1,6 +1,6 @@
 exports.run = (client,message,args) =>
 {
-    var commandList = Array.from(client.commands.keys());
+    var commandList = Array.from(client.commands.keys()).filter(r=>r!='devInput');
     message.channel.send('Help command is still being made, so here is a list of commands that you can type to get the usage: \n'+ '\`'+commandList+'\`');
 };
 exports.conf = 
@@ -9,7 +9,7 @@ exports.conf =
     args:0,
     usage:' ',
     description: 'gives you help lmao',
-    category:'fun',
+    category:'standard',
     perms:'',
     aliases:['h'],
 };

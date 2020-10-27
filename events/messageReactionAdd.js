@@ -8,81 +8,85 @@ exports.on = async (client,messageReaction,user) =>
     messageReaction = await messageReaction.fetch();
    }
    //got the whole message now
-   var msgIds = await getDB(messageReaction.message);
+
+   var msgIds = await getDBSchedule(messageReaction.message);
    if(!msgIds||msgIds == 'null') return;
    if(messageReaction.message.author.id == client.user.id && user.id != client.user.id && msgIds.includes(messageReaction.message.id))//Is this a schedule message?
    {
-       var maData = ['12345','23445','12345'];
-       var yes =['-'];var no =['-']; var maybe = ['-'];
-       var allReactions = await messageReaction.message.reactions.cache;
-       //modDB(messageReaction,maData);
+   scheduleCommandCheck(client,messageReaction,user);
+   }
 
-       for(var msgR of allReactions.values())
-       {
-        switch(msgR.emoji.name)
+};
+
+async function scheduleCommandCheck(client,messageReaction,user)
+{
+
+        //var maData = ['12345','23445','12345'];
+        var yes =['-'];var no =['-']; var maybe = ['-'];
+        var allReactions = await messageReaction.message.reactions.cache;
+        //modDB(messageReaction,maData);
+ 
+        for(var msgR of allReactions.values())
         {
-            case '✅':
-            yes = await(await(msgR.users.fetch())).map(member=>member.username);
-                break;
-            case '❔':
-            maybe = await(await(msgR.users.fetch())).map(member=>member.username);
-                break;
-            case '❌':
-            no = await(await(msgR.users.fetch())).map(member=>member.username);
-                  break;
+         switch(msgR.emoji.name)
+         {
+             case '✅':
+             yes = await(await(msgR.users.fetch())).map(member=>member.username);
+                 break;
+             case '❔':
+             maybe = await(await(msgR.users.fetch())).map(member=>member.username);
+                 break;
+             case '❌':
+             no = await(await(msgR.users.fetch())).map(member=>member.username);
+                   break;
+         }
         }
-       }
-       yes = yes.filter(r=>r!==client.user.username);
-       no = no.filter(r=>r!==client.user.username);
-       maybe= maybe.filter(r=>r!==client.user.username);
-       var oldEmbed = messageReaction.message.embeds[0];
-       var embedObj = 
-{
-    embed:
-    {
-        color:16748799,
-            title:oldEmbed.title,
-            description:'',
-        fields:
-            [
-                {
-                    name: '✅     Accepted',
-                    value: yes.join(' \n')+'\n-',
-                    inline: true,
-                },
-                {
-                    name: '❌    Rejected',
-                    value: no.join(' \n')+'\n-',
-                    inline: true,
-                },
-                {
-                    name: '❔     Unsure',
-                    value: maybe.join(' \n')+'\n-',
-                    inline: true,
-                },
-                   
-                {
-                    name: '\u200b',
-                    value: '\u200b',
-                    inline: false,
-                },
-            ],
-            footer: {
-                text: oldEmbed.footer.text,
-                icon_url: oldEmbed.footer.icon_url,
-            }
-    }
-}
-messageReaction.message.edit(embedObj);
-}
-
+        yes = yes.filter(r=>r!==client.user.username);
+        no = no.filter(r=>r!==client.user.username);
+        maybe= maybe.filter(r=>r!==client.user.username);
+        var oldEmbed = messageReaction.message.embeds[0];
+        var embedObj = 
+ {
+     embed:
+     {
+         color:16748799,
+             title:oldEmbed.title,
+             description:'',
+         fields:
+             [
+                 {
+                     name: '✅     Accepted',
+                     value: yes.join(' \n')+'\n-',
+                     inline: true,
+                 },
+                 {
+                     name: '❌    Rejected',
+                     value: no.join(' \n')+'\n-',
+                     inline: true,
+                 },
+                 {
+                     name: '❔     Unsure',
+                     value: maybe.join(' \n')+'\n-',
+                     inline: true,
+                 },
+                    
+                 {
+                     name: '\u200b',
+                     value: '\u200b',
+                     inline: false,
+                 },
+             ],
+             footer: {
+                 text: oldEmbed.footer.text,
+                 icon_url: oldEmbed.footer.icon_url,
+             }
+     }
+ }
+ messageReaction.message.edit(embedObj);
+ 
 };
 
-exports.conf = 
-{
-    event:'messageReactionAdd'
-};
- function getDB(message)
+ function getDBSchedule(message)
 {
     return new Promise(async(resolve, reject) =>{
         var msgIds;
@@ -103,3 +107,7 @@ exports.conf =
     
 }
 
+exports.conf = 
+{
+    event:'messageReactionAdd'
+};
