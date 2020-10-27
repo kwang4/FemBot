@@ -14,8 +14,10 @@ exports.run =  (client,message,args) =>
                  {
                   msg+=msg;
                  }
-             channel.send(msg);
+             //channel.send(msg);
+             
          }
+         message.channel.send({embed:{title:'This is a donator only command. Please consider donating to gain access to this.',description:'Jk lmao, im fixing perms for it',color:16748799}});
         
     }
     else
