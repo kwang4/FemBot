@@ -4,7 +4,3 @@ module.exports =
     cache,
     
 };
-exports.conf = 
-{
-    event:'pp'
-};

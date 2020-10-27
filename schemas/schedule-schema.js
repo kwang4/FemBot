@@ -7,6 +7,12 @@ const reqString =
 const scheduleSchema = mongoose.Schema(
     {
         _id:reqString,
+        serverName:
+        {
+            type:String,
+            required:false,
+            default:''
+        },
         messageIds:
         {
             type:Array,

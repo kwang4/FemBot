@@ -11,7 +11,7 @@ exports.loadAndRunEvents = (client)=>
                 const event = require('../events/'+file);
                 if(event.conf.event)
                 client.on(event.conf.event,event.on.bind(null,client));
-
+                console.log('event handled');
             });
     });
 };

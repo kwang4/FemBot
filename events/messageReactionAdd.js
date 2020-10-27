@@ -1,4 +1,3 @@
-const mongo = require('../mongo.js');
 const scheduleSchema = require('../schemas/schedule-schema.js');
 const iconUrl = 'https://cdn.discordapp.com/avatars/766406073715523594/c43734e1a775fd35b9b5ecc45110914c.png?size=256';
 
@@ -83,49 +82,24 @@ exports.conf =
 {
     event:'messageReactionAdd'
 };
-
-
-async function modDB(messageReaction,maData)
+ function getDB(message)
 {
-    await mongo().then(async (mongoose) =>
-    {
-        try
-        {
-            await scheduleSchema.findOneAndUpdate(
-                {
-                    _id:messageReaction.message.guild.id
-                }, 
-                {
-                    _id: messageReaction.message.guild.id,
-                    messageIds:maData
-                },
-                {upsert:true,useFindAndModify:false}
-            );
-        }catch{console.error('db most likely down');}
-        finally
-        {
-            mongoose.connection.close();
-        }
+    return new Promise(async(resolve, reject) =>{
+        var msgIds;
+            try
+            {
+                const guildId = message.guild.id;
+                const result = await scheduleSchema.findOne({_id:guildId});
+                if(!result) {resolve('null');return;}
+                msgIds = result.messageIds;
+            }
+            catch(err) {console.log(err)}
+            finally
+            {
+                resolve(msgIds);
+            }
+
     });
-}
-function getDB(message)
-{
-    return new Promise((resolve, reject) =>{
-        var msgIds
-        mongo().then(async (mongoose) =>{
-               try{
-                   const guildId = message.guild.id;
-                   const result = await scheduleSchema.findOne({_id:guildId});
-                   if(!result) {resolve('null');return;}
-                    msgIds = result.messageIds;
-               }
-               catch(err) {console.log(err)}
-               finally{
-                   mongoose.connection.close();
-                   resolve(msgIds);
-               }
-        });
-    })
     
 }
 

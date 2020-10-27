@@ -1,5 +1,4 @@
 {
     "token": "null",
-    "prefix": ".f",
-    "mongoPath": "mongodb://localhost:27017/fembot"
+    "prefix": ".f"
 }

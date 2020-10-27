@@ -1,4 +1,3 @@
-const mongo = require('../../mongo.js');
 const scheduleSchema = require('../../schemas/schedule-schema.js');
 const iconUrl = 'https://cdn.discordapp.com/avatars/766406073715523594/c43734e1a775fd35b9b5ecc45110914c.png?size=256';
 exports.run = async (client,message,args) =>
@@ -77,8 +76,6 @@ exports.conf =
 
 async function pushDB(msg,maData)
 {
-    await mongo().then(async (mongoose) =>
-    {
         try
         {
             await scheduleSchema.findOneAndUpdate(
@@ -87,14 +84,10 @@ async function pushDB(msg,maData)
                 }, 
                 {
                     _id: msg.guild.id,
+                    serverName:msg.guild.name,
                     $push:{messageIds:maData}
                 },
                 {upsert:true,useFindAndModify:false}
             );
         }catch{console.error('db most likely down');}
-        finally
-        {
-            mongoose.connection.close();
-        }
-    });
 }

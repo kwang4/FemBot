@@ -1,20 +1,11 @@
-const mongo = require('../mongo.js');
 const welcomeSchema = require('../schemas/welcome-schema.js');
+var data;
 exports.on = async (client,member) =>
 {
+    data = null;
     const {guild} = member;
-    let data;
-        await mongo().then(async (mongoose)=>{
-            try{
-            const result = await welcomeSchema.findOne({_id:guild.id});
-            if(!result) return;
-            data = [result.channelId,result.welcomeText];
-            }
-            finally
-            {
-                mongoose.connection.close();
-            }
-        });
+    console.log('person stuff');
+   await getWelcomeMsg(guild);
     if(!data) return;
     const channelId = data[0];
     const text = data[1];
@@ -26,4 +17,12 @@ exports.on = async (client,member) =>
 exports.conf = 
 {
     event:'guildMemberAdd'
+};
+
+async function getWelcomeMsg (guild){
+    try{
+    const result = await welcomeSchema.findOne({_id:guild.id});
+    if(!result) return;
+    data = [result.channelId,result.welcomeText];
+    }catch(err){console.log(err);}
 };
