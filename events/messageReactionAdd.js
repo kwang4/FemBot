@@ -1,6 +1,5 @@
 const scheduleSchema = require('../schemas/schedule-schema.js');
 const iconUrl = 'https://cdn.discordapp.com/avatars/766406073715523594/c43734e1a775fd35b9b5ecc45110914c.png?size=256';
-
 exports.on = async (client,messageReaction,user) =>
 {
    if(messageReaction.partial)
@@ -25,6 +24,11 @@ async function scheduleCommandCheck(client,messageReaction,user)
         var yes =['-'];var no =['-']; var maybe = ['-'];
         var allReactions = await messageReaction.message.reactions.cache;
         //modDB(messageReaction,maData);
+        if(messageReaction.emoji.name =='💀')
+        {
+            deleteMsg(client,messageReaction,user);
+            return;
+        }
  
         for(var msgR of allReactions.values())
         {
@@ -39,9 +43,6 @@ async function scheduleCommandCheck(client,messageReaction,user)
              case '❌':
              no = await(await(msgR.users.fetch())).map(member=>member.username);
                    break;
-            case '💀':
-            
-                    break;
          }
         }
         yes = yes.filter(r=>r!==client.user.username);
@@ -89,6 +90,21 @@ async function scheduleCommandCheck(client,messageReaction,user)
  
 };
 
+function deleteMsg(client,messageReaction,user)
+{
+    var guild = messageReaction.message.guild;
+    var reactionPerson = guild.member(user);
+    if(reactionPerson.hasPermission('MANAGE_MESSAGES'))
+    {
+        popScheduleDB(messageReaction.message);
+        messageReaction.message.delete();
+    }
+    else
+    {
+        messageReaction.users.remove(user);
+        messageReaction.message.channel.send(`${user.toString()} doesn't have the MANAGE_MESSAGE perms to delete a schedule`);
+    }
+}
  function getDBSchedule(message)
 {
     return new Promise(async(resolve, reject) =>{
@@ -108,6 +124,21 @@ async function scheduleCommandCheck(client,messageReaction,user)
 
     });
     
+}
+async function popScheduleDB(message,maData)
+{
+        try
+        {
+            await scheduleSchema.findOneAndUpdate(
+                {
+                    _id:message.guild.id
+                }, 
+                {
+                    $pull:{messageIds:message.id}
+                },
+                {upsert:true,useFindAndModify:false}
+            );
+        }catch{console.error('db most likely down');}
 }
 
 exports.conf = 

@@ -43,7 +43,7 @@ client.on("message", (message) => {
     if(!command) return;
     if(command.conf.perms&&!message.member.hasPermission(command.conf.perms))
     {
-        message.reply('You do not have the required perms ');
+        message.reply('Your perms are not higher than or equal to ' + command.conf.perms);
         return;    
     } 
     if(args.length<command.conf.args) //if provided args num is less than required args in command
