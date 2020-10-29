@@ -1,12 +1,12 @@
 var emojicache;
-exports.run =  (client,message,args) =>
+exports.run =  async(client,message,args) =>
 {
     const channel = message.channel;
     emojicache = client.emojis.cache;
     searchFor = emojicache.find(r=>r.name.toLowerCase()=='epilepsy');
     if(searchFor)
     {
-        
+        var delMe = [];
         for(var v=0;v<5;v++)
         {
             let msg = `<a:${searchFor.name}:${searchFor.id}>`;
@@ -14,11 +14,17 @@ exports.run =  (client,message,args) =>
                  {
                   msg+=msg;
                  }
-             //channel.send(msg);
+              delMe.push(await channel.send(msg));
+
              
          }
-         message.channel.send({embed:{title:'This is a donator only command. Please consider donating to gain access to this.',description:'Jk lmao, im fixing perms for it',color:16748799}});
-        
+         //message.channel.send({embed:{title:'This is a donator only command. Please consider donating to gain access to this.',description:'Jk lmao, im fixing perms for it',color:16748799}});
+         setTimeout(function(){ 
+            delMe.forEach(message=>
+                {
+                    message.delete();
+                });
+         }, 7000);
     }
     else
     {

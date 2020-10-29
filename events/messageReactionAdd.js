@@ -39,6 +39,9 @@ async function scheduleCommandCheck(client,messageReaction,user)
              case '❌':
              no = await(await(msgR.users.fetch())).map(member=>member.username);
                    break;
+            case '💀':
+            
+                    break;
          }
         }
         yes = yes.filter(r=>r!==client.user.username);

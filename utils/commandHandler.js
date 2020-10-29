@@ -41,14 +41,10 @@ client.on("message", (message) => {
 
     const command = client.commands.get(commandName)||client.commands.find(cmd=>cmd.conf.aliases && cmd.conf.aliases.includes(commandName));
     if(!command) return;
-    if(command.conf.perms)
+    if(command.conf.perms&&!message.member.hasPermission(command.conf.perms))
     {
-        if(!message.member.hasPermission(command.conf.perms))
-        {
-            message.reply('You do not have the required perms ');
-            return;
-        }
-        
+        message.reply('You do not have the required perms ');
+        return;    
     } 
     if(args.length<command.conf.args) //if provided args num is less than required args in command
     {

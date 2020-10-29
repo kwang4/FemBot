@@ -4,7 +4,6 @@ exports.on = async (client,member) =>
 {
     data = null;
     const {guild} = member;
-    console.log('person stuff');
    await getWelcomeMsg(guild);
     if(!data) return;
     const channelId = data[0];
